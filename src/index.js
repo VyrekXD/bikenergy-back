@@ -39,6 +39,21 @@ app.get('/data', async (req, res) => {
 	res.status(200).send(json)
 })
 
+app.delete("/delete", async(req, res) => {
+	const auth = JSON.parse(req.headers.authorization)
+	if(auth.password){
+		if(auth.password !== "bikenergy2022")return res.status(401)
+		
+		if(!(await fs.readFile("./data.json").catch(x => null)))return res.status(500)
+
+		await fs.writeFile("./data.json", JSON.stringify("[]"))
+
+		res.status(200)
+	} else {
+		res.status(401)
+	}
+})
+
 app.listen(3333, () => {
 	console.log(`Bikenergy backend listening on port 3333`)
 })
