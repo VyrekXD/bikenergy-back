@@ -17,9 +17,9 @@ app.get('/', (req, res) => {
 
 app.post('/submit', async (req, res) => {
 	try {
-		await fs.readFile('./data.json', 'utf-8')
+		await fs.readFile('../data.json', 'utf-8')
 	} catch (error) {
-		await fs.writeFile('./data.json', '[]')
+		await fs.writeFile('../data.json', '[]')
 	}
 
 	const data = await fs.readFile('../data.json', 'utf-8')
@@ -27,26 +27,26 @@ app.post('/submit', async (req, res) => {
 
 	json.push(req.body)
 
-	await fs.writeFile('./data.json', JSON.stringify(json))
+	await fs.writeFile('../data.json', JSON.stringify(json))
 
 	res.status(200).send('OK')
 })
 
 app.get('/data', async (req, res) => {
-	const data = await fs.readFile('./data.json', 'utf-8')
+	const data = await fs.readFile('../data.json', 'utf-8')
 	const json = JSON.parse(data)
 
 	res.status(200).send(json)
 })
 
-app.delete("/delete", async(req, res) => {
+app.delete('/delete', async (req, res) => {
 	const auth = JSON.parse(req.headers.authorization)
-	if(auth.password){
-		if(auth.password !== "bikenergy2022")return res.status(401)
-		
-		if(!(await fs.readFile("./data.json").catch(x => null)))return res.status(500)
+	if (auth.password) {
+		if (auth.password !== 'bikenergy2022') return res.status(401)
 
-		await fs.writeFile("./data.json", JSON.stringify("[]"))
+		if (!(await fs.readFile('../data.json').catch((x) => null))) return res.status(500)
+
+		await fs.writeFile('../data.json', JSON.stringify('[]'))
 
 		res.status(200)
 	} else {
